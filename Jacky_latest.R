@@ -88,7 +88,13 @@ rownames(DROP_DIFF) <- c("Drop1","Drop2", "Drop3", "Drop4","Drop5", "Drop6", "Dr
 #####
 # Result for DIFFERENT profiles with 1 to 13 alleles drop
 
-result =NULL
+# Creating a empty DataFrame name DROP_DIFF
+DROP_DIFF <- matrix(0, ncol = 27, nrow = 13)
+DROP_DIFF <- data.frame(DROP_DIFF)
+rownames(DROP_DIFF) <- c("Drop1","Drop2", "Drop3", "Drop4","Drop5", "Drop6", "Drop7","Drop8", "Drop9", "Drop10","Drop11","Drop12", "Drop13")
+
+
+result = NULL
 directmatchResult=NULL
   
   for (j in c(1:13)){ 
@@ -113,4 +119,45 @@ directmatchResult=NULL
     directmatchResult = unlist(directMatch(result, genos, ngenos)) -> DROP_DIFF[j,]
     print(unlist(directMatch(result, genos, ngenos)))
   }
+
+
+
+
+############# 
+#####
+# Running 50 DIFFERENT profiles with 13 alleleDROP 
+
+# Creating a empty DataFrame name DROP_DIFF
+SET50 <- matrix(0, ncol = 27, nrow = 50)
+SET50 <- data.frame(SET50)
+
+
+result =NULL
+directmatchResult=NULL
+DROP=NULL
+
+for (k in c(1:50)){   # Chossing 1-50 profiles
+  ngenos = dim(genos)[1]
+  sample(ngenos,1) -> PROFILE  # choosing # of RANDOM profile(s)
+  PROFILE
+  genos[PROFILE,,] -> CONTROL # this require a manual insert of the choosen profile # 
+  CONTROL
+  
+  for (j in c(13)){   # Choosing # of allele
+    dropout = function(DDprofile) {
+      LOCIDROP <- sample(13,j,F)
+      ALLEDROP <- sample(2,j,T) 
+      for (i in c(1:j))
+        if(DDprofile[ALLEDROP[i], LOCIDROP[i]] <- 0) {
+          print(DDprofile)
+        }
+      return(DDprofile)
+    }
+    result = dropout(CONTROL) 
+    print(result)
+    #print(unlist(directMatch(result, genos, ngenos)))
+    directmatchResult = unlist(directMatch(result, genos, ngenos)) -> SET50[k,]
+    print(unlist(directMatch(result, genos, ngenos)))
+  }
+}
 
